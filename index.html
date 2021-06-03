@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Awesome</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/lib/codemirror.min.css">`
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/addon/mode/simple.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+
+<body>
+    <script>
+        CodeMirror.defineSimpleMode("simplemode", {
+            start: [
+                { regex: /\bbin(?:ti)*\b/, token: "operator" }
+            ]
+        })
+    </script>
+    <style>
+        .cm-operator {
+            color: #A11;
+        }
+
+        .wrapper>* {
+            margin-bottom: 16px;
+            border: solid 1px #333;
+        }
+    </style>
+
+    <div class="wrapper">
+        <div class="code-mirror"></div>
+        <div class="mermaid">graph TD
+            A[Client] --> B[Load Balancer]
+            B --> C[Server01]
+            B --> D[Server02]</div>
+    </div>
+
+    <script>
+        const myCodeMirror = CodeMirror(document.querySelector(".code-mirror"));
+        myCodeMirror.on("change", (cm) => {
+            const output = document.querySelector(".mermaid");
+            if (output.firstChild !== null) {
+                output.innerHTML = "";
+            }
+            const insert = function (code) {
+                output.innerHTML = code;
+            };
+            mermaid.render("preparedScheme", cm.getValue(), insert);
+        })
+        mermaid.initialize();
+    </script>
+</body>
+
+</html>
