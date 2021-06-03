@@ -33,13 +33,14 @@
     <div class="wrapper">
         <div class="code-mirror"></div>
         <div class="mermaid">graph TD
-            A[Client] --> B[Load Balancer]
-            B --> C[Server01]
-            B --> D[Server02]</div>
+            A --> B</div>
     </div>
 
     <script>
-        const myCodeMirror = CodeMirror(document.querySelector(".code-mirror"));
+        const myCodeMirror = CodeMirror(document.querySelector(".code-mirror"), {
+            value: `graph TD
+    A --> B`
+        });
         myCodeMirror.on("change", (cm) => {
             const output = document.querySelector(".mermaid");
             if (output.firstChild !== null) {
