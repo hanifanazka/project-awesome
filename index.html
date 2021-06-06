@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Awesome</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/lib/codemirror.min.css">`
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/lib/codemirror.min.css">
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/lib/codemirror.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/addon/mode/simple.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
@@ -15,7 +15,7 @@
     <script>
         CodeMirror.defineSimpleMode("simplemode", {
             start: [
-                { regex: /\bbin(?:ti)*\b/, token: "operator" }
+                { regex: /\bbin(?:ti)*\b/i, token: "operator" }
             ]
         })
     </script>
@@ -38,8 +38,7 @@
 
     <script>
         const myCodeMirror = CodeMirror(document.querySelector(".code-mirror"), {
-            value: `graph TD
-    A --> B`
+            value: `A bin B`
         });
         myCodeMirror.on("change", (cm) => {
             const output = document.querySelector(".mermaid");
@@ -49,7 +48,7 @@
             const insert = function (code) {
                 output.innerHTML = code;
             };
-            mermaid.render("preparedScheme", cm.getValue(), insert);
+            mermaid.render("preparedScheme", "graph TD\n" + cm.getValue().replace(/bin/gi, "-->"), insert);
         })
         mermaid.initialize();
     </script>
