@@ -33,12 +33,12 @@
     <div class="wrapper">
         <div class="code-mirror"></div>
         <div class="mermaid">graph TD
-            A --> B</div>
+            A --> B --> C</div>
     </div>
 
     <script>
         const myCodeMirror = CodeMirror(document.querySelector(".code-mirror"), {
-            value: `A bin B`
+            value: `A bin B bin C`
         });
         myCodeMirror.on("change", (cm) => {
             const output = document.querySelector(".mermaid");
@@ -48,7 +48,21 @@
             const insert = function (code) {
                 output.innerHTML = code;
             };
-            mermaid.render("preparedScheme", "graph TD\n" + cm.getValue().replace(/bin/gi, "-->"), insert);
+            mermaid.render("preparedScheme",
+            cm.getValue()
+            .split("\n")
+	        .filter(line => line.length !== 0)
+	        .map(line => line
+	        	.replace(/(.*?)\s+bin\s+/gim, (match, p1) => {
+	        		const id = p1
+	        			.trim()
+	        			.replace(/\s/, "-")
+	        			.toLowerCase()
+	        		return id + "[" + p1.trim() + "] --> "
+	        	})
+	        )
+	        .reduce((acc, line) => acc + line + "\n", "graph TD\n"),
+            insert);
         })
         mermaid.initialize();
     </script>
