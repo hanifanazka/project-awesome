@@ -15,7 +15,9 @@
     <script>
         CodeMirror.defineSimpleMode("simplemode", {
             start: [
-                { regex: /\bbin(?:ti)*\b/i, token: "operator" }
+                { regex: /\bbin\b/i, token: "operator" },
+                { regex: /\bbinti\b/i, token: "operator" },
+                { regex: "-->", token: "operator" }
             ]
         })
     </script>
@@ -48,21 +50,23 @@
             const insert = function (code) {
                 output.innerHTML = code;
             };
-            mermaid.render("preparedScheme",
-            cm.getValue()
-            .split("\n")
-	        .filter(line => line.length !== 0)
-	        .map(line => line
-	        	.replace(/(.*?)\s+bin\s+/gim, (match, p1) => {
-	        		const id = p1
-	        			.trim()
-	        			.replace(/\s/, "-")
-	        			.toLowerCase()
-	        		return id + "[" + p1.trim() + "] --> "
-	        	})
-	        )
-	        .reduce((acc, line) => acc + line + "\n", "graph TD\n"),
-            insert);
+            mermaid.render(
+                "preparedScheme",
+                cm
+                    .getValue()
+                    .split("\n")
+	                .filter(line => line.length !== 0)
+	                .map(line => line
+	                	.replace(/(.*?)\s+bin\s+/gim, (match, p1) => {
+	                		const id = p1
+	                			.trim()
+	                			.replace(/\s/, "-")
+	                			.toLowerCase()
+	                		return id + "[" + p1.trim() + "] --> "
+	                	})
+	                )
+	                .reduce((acc, line) => acc + line + "\n", "graph TD\n"),
+                insert);
         })
         mermaid.initialize();
     </script>
